@@ -74,8 +74,8 @@ class MainScene extends Phaser.Scene {
 
         // Secondary Props
         const book_green = this.add.image(1766.5, 57.5, 'book_green').setDepth(1);
-        const book_red = this.add.image(1736.5, 1043.5, 'book_red').setDepth(4); 
-        const can_empty = this.add.image(444.4, 802.2, 'can_empty').setAngle(80).setDepth(4); 
+        const book_red = this.add.image(1736.5, 1043.5, 'book_red').setDepth(4);
+        const can_empty = this.add.image(444.4, 802.2, 'can_empty').setAngle(80).setDepth(4);
 
         // Grass: foreground overlay at bottom, depth 5
         this.add.image(960, 1080, 'grass').setOrigin(0.5, 1).setDepth(5);
@@ -101,7 +101,7 @@ class MainScene extends Phaser.Scene {
             if (this.dispenser.texture.key === 'dispenser_success') {
                 this.sound.play('click', { volume: 0.3 }); // Click sound for dispenser interaction
                 this.dispenser.setTexture('dispenser_open');
-                
+
                 this.time.delayedCall(100, () => {
                     this.cat.setTexture('cat_happy');
                     this.dispenser.setTexture('dispenser');
@@ -118,14 +118,14 @@ class MainScene extends Phaser.Scene {
                 });
             }
         });
-        
+
         // Create Start Tooltip (floating guide)
         const startX = this.cat.x;
         const startY = this.cat.y - 140;
         this.startTooltip = this.add.image(startX, startY, 'start_message')
             .setOrigin(0.5)
             .setDepth(10);
-            
+
         this.startTooltipTween = this.tweens.add({
             targets: this.startTooltip,
             y: startY - 8,
@@ -185,7 +185,7 @@ class MainScene extends Phaser.Scene {
                 this.triggerCatJump(this.cat);
             }
         });
-        
+
         // Set up drag events
         this.input.on('dragstart', (pointer, gameObject) => {
             // Dismiss start tooltip on first interaction
@@ -228,7 +228,7 @@ class MainScene extends Phaser.Scene {
         this.input.on('dragend', (pointer, gameObject, dropped) => {
             if (gameObject === cat) return;
             gameObject.setTexture(gameObject.getData('defaultKey'));
-            
+
             if (!dropped) {
                 this.snapToOriginal(gameObject);
             }
@@ -238,7 +238,7 @@ class MainScene extends Phaser.Scene {
             this.resetCat(cat);
             gameObject.setData('isStacked', true);
             this.stack.push(gameObject);
-            gameObject.setDepth(3 + this.stack.length * 0.1); 
+            gameObject.setDepth(3 + this.stack.length * 0.1);
             gameObject.setAngle(0);
             this.rebuildStack();
         });
@@ -278,7 +278,7 @@ class MainScene extends Phaser.Scene {
             this.sound.play('click', { volume: 0.3 });
             this.restartGame();
         });
-        
+
         infoBtn.on('pointerdown', () => {
             this.sound.play('click', { volume: 0.3 });
             this.toggleInfoMessage(infoBtn);
@@ -309,9 +309,9 @@ class MainScene extends Phaser.Scene {
             color: '#ffffff',
             padding: { x: 8, y: 4 }
         })
-        .setOrigin(0.5, 1)
-        .setDepth(26)
-        .setAlpha(0);
+            .setOrigin(0.5, 1)
+            .setDepth(26)
+            .setAlpha(0);
 
         target.on('pointerover', () => {
             this.tweens.add({
@@ -377,7 +377,7 @@ class MainScene extends Phaser.Scene {
     snapToOriginal(gameObject) {
         gameObject.setData('isStacked', false);
         gameObject.setDepth(gameObject.getData('originalDepth'));
-        
+
         const shadow = gameObject.getData('shadow');
 
         this.tweens.add({
@@ -407,7 +407,7 @@ class MainScene extends Phaser.Scene {
             cat.setData('onStack', false);
             cat.setData('isJumping', false);
             cat.setTexture('cat');
-            
+
             this.tweens.add({
                 targets: cat,
                 x: cat.getData('originalX'),
@@ -419,7 +419,7 @@ class MainScene extends Phaser.Scene {
     }
 
     rebuildStack() {
-        let currentY = 920; 
+        let currentY = 920;
         const stackX = 1120;
         const verticalOffset = -12;
 
@@ -427,7 +427,7 @@ class MainScene extends Phaser.Scene {
             const defaultKey = gameObject.getData('defaultKey');
             const defaultTextureHeight = this.textures.get(defaultKey).get().height;
             const targetY = currentY - (defaultTextureHeight / 2);
-            
+
             this.tweens.add({
                 targets: gameObject,
                 x: stackX,
@@ -436,7 +436,7 @@ class MainScene extends Phaser.Scene {
                 duration: 200,
                 ease: 'Quad.easeOut'
             });
-            
+
             const shadow = gameObject.getData('shadow');
             if (shadow) {
                 shadow.setDepth(3 + index * 0.1 - 0.01);
@@ -449,9 +449,9 @@ class MainScene extends Phaser.Scene {
                     ease: 'Quad.easeOut'
                 });
             }
-            
+
             this.sound.play('click', { volume: 0.3 }); // Click sound when item snaps to stack
-            
+
             currentY = currentY - defaultTextureHeight - verticalOffset;
             gameObject.setDepth(3 + index * 0.1);
         });
@@ -465,7 +465,7 @@ class MainScene extends Phaser.Scene {
 
         let currentLevelTop = 920;
         const verticalOffset = -12;
-        
+
         this.stack.forEach(gameObject => {
             const defaultKey = gameObject.getData('defaultKey');
             const defaultTextureHeight = this.textures.get(defaultKey).get().height;
@@ -474,7 +474,7 @@ class MainScene extends Phaser.Scene {
 
         const catHeight = this.textures.get('cat_back').get().height;
         const targetX = 1120;
-        const targetY = currentLevelTop - (catHeight / 2) + 24; 
+        const targetY = currentLevelTop - (catHeight / 2) + 24;
 
         // Parabolic jump parameters
         const startX = cat.x;
@@ -494,7 +494,7 @@ class MainScene extends Phaser.Scene {
                 // Success State Detection
                 if (this.stack.length === 5) {
                     this.dispenser.setTexture('dispenser_success');
-                    
+
                     this.time.delayedCall(500, () => {
                         const startReturnX = cat.x;
                         const startReturnY = cat.y;
@@ -517,14 +517,14 @@ class MainScene extends Phaser.Scene {
                             }
                         });
                     });
-                } 
+                }
                 // Failure Condition
                 else if (this.stack.length < 5) {
                     this.time.delayedCall(500, () => {
                         // Start return jump and swap texture IMMEDIATELY
                         cat.setTexture('cat_cry');
                         this.sound.play('meow', { volume: 0.35 }); // Play meow on failure
-                        
+
                         const startReturnX = cat.x;
                         const startReturnY = cat.y;
                         const returnTargetX = cat.getData('originalX');
@@ -677,10 +677,10 @@ class MainScene extends Phaser.Scene {
         // Hover states
         card.on('pointerover', () => card.setTexture('success_card_hover'));
         card.on('pointerout', () => card.setTexture('success_card_default'));
-        
+
         // Pressed state
         card.on('pointerdown', () => card.setTexture('success_card_pressed'));
-        
+
         // Click action
         card.on('pointerup', () => {
             this.sound.play('click', { volume: 0.3 });
@@ -744,5 +744,5 @@ class MainScene extends Phaser.Scene {
         }
     }
 
-    update() {}
+    update() { }
 }
